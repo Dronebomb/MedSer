@@ -4,26 +4,8 @@ A running log of all changes made to the MedSer home server. Most recent changes
 
 ---
 
-## [2026-04-11] Docker: Fixed qBittorrent trackers unreachable (wrong network interface)
-**Change:** qBittorrent Advanced settings had Network Interface set to `lo` (loopback) instead of the VPN tunnel interface. Changed to the correct VPN interface, which resolved all trackers showing "skipping tracker announce (unreachable)".
-**Outcome:** ✅ Working
-
----
-
-## [2026-04-11] Docker: Connected Gluetun to main_default network
-**Change:** Radarr/Sonarr could not resolve the `gluetun` hostname because Gluetun was only on `yams_network` while Radarr/Sonarr were on `main_default`. Added `main_default` as an additional network to Gluetun in the compose file (with alias `gluetun`) and declared it as external in the networks section. Updated via Compose Manager Plus.
-**Outcome:** ✅ Working
-
----
-
-## [2026-04-11] Docker: Fixed qBittorrent session data lost after container recreation
-**Change:** qBittorrent BT_backup directory was empty after container recreation, causing all torrents to disappear from the UI. Files were confirmed intact at /mnt/user/Media/downloads/torrents/. Root cause was container recreation (not restart) wiping in-memory session state. Torrents re-added manually.
-**Outcome:** ✅ Working
-
----
-
-## [2026-04-11] Docker: Fixed Gluetun not connecting to ProtonVPN
-**Change:** Gluetun was connecting to a non-ProtonVPN Australian host (Host Universal Pty Ltd) instead of ProtonVPN. Root cause was an expired/invalid WireGuard private key. Generated a new WireGuard key from the ProtonVPN dashboard with NAT-PMP/port forwarding enabled and updated WIREGUARD_PRIVATE_KEY in /mnt/user/appdata/compose/torrent/.env.
+## [2026-04-11] Docker: Fixed qBittorrent/Gluetun stack
+**Change:** Resolved multiple issues with the torrent stack — expired WireGuard key replaced via ProtonVPN dashboard; Gluetun added to `main_default` network so Radarr/Sonarr can resolve it by hostname; qBittorrent network interface changed from `lo` to VPN tunnel interface fixing tracker announces; torrents re-added after session data was lost from container recreation.
 **Outcome:** ✅ Working
 
 ---
