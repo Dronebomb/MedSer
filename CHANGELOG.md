@@ -4,6 +4,12 @@ A running log of all changes made to the MedSer home server. Most recent changes
 
 ---
 
+## [14-04-2026 9:30am] Docker/Gluetun: Set timezone to Brisbane for log clarity
+- Added `TZ=Australia/Brisbane` to Gluetun environment in `docker-compose.yaml`
+- Gluetun logs were previously in UTC causing confusion when debugging - now show AEST
+
+---
+
 ## [14-04-2026 9:30am] Docker/qBittorrent: Fixed recurring Gluetun namespace mismatch
 - qBittorrent was ending up in an isolated network namespace again after any Gluetun restart, same root cause as 13-04 fix
 - Confirmed via `/proc/<pid>/ns/net` inode comparison - inodes differed despite compose file having `network_mode: "service:gluetun"`
