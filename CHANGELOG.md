@@ -4,6 +4,24 @@ A running log of all changes made to the MedSer home server. Most recent changes
 
 ---
 
+## [14-04-2026 9:30am] Docker/qBittorrent: Fixed recurring Gluetun namespace mismatch
+- qBittorrent was ending up in an isolated network namespace again after any Gluetun restart, same root cause as 13-04 fix
+- Confirmed via `/proc/<pid>/ns/net` inode comparison - inodes differed despite compose file having `network_mode: "service:gluetun"`
+- Root cause: Docker always bakes the resolved container ID into `NetworkMode` at creation time, so if Gluetun restarts without qBittorrent also restarting, qBit is left orphaned
+- Permanent fix: updated `depends_on` in `docker-compose.yaml` to use `condition: service_healthy` and `restart: true` so qBittorrent automatically restarts whenever Gluetun does
+- Recreated qBittorrent from compose to apply the fix
+
+---
+
+## [14-04-2026 9:30am] Docker/Gluetun: Fixed Gluetun stuck unhealthy due to broken healthcheck added by Copilot
+- Gluetun was reporting unhealthy despite VPN tunnel passing traffic and internal healthcheck logging healthy at startup
+- Root cause: Copilot added a custom healthcheck to `docker-compose.yaml` on 13-04 using `wget --spider` which sends a HEAD request - Gluetun's health server at 127.0.0.1:9999 only responds correctly to GET requests, returning a non-200 to HEAD which caused Docker to mark it unhealthy
+- Original container predated this change so was unaffected; problem only appeared after container was recreated today
+- Fixed by changing healthcheck in compose to `wget -qO-` (GET request) instead of `--spider`
+- Both Gluetun and qBittorrent came up healthy after recreate
+
+---
+
 ## [13-04-2026] Docker: Fixed qBittorrent 502 / WebUI unreachable
 - qBittorrent was stuck in a stale Gluetun network namespace after Gluetun had been recreated at some point — the container's `NetworkMode` was hardcoded to the old Gluetun container ID rather than its name, so after recreation qBittorrent ended up in its own isolated namespace
 - Confirmed the mismatch by comparing `/proc/<pid>/ns/net` inodes for both containers — they differed
