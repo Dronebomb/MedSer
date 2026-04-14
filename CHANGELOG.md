@@ -4,6 +4,15 @@ A running log of all changes made to the MedSer home server. Most recent changes
 
 ---
 
+## [15-04-2026 8:30am] Docker/qBittorrent: Network interface reverted to lo again - fixed manually
+- All trackers showing "skipping tracker announce (unreachable)", DHT 0 nodes, no downloads or uploads
+- qBittorrent Advanced settings had reverted network interface back to `lo` (loopback) instead of `tun0`
+- Changed back to `tun0` manually via WebUI - torrents resumed
+- This is the same issue fixed on 11-04, recurring for unknown reasons - root cause not yet identified
+- TODO: investigate why the network interface setting resets (likely on container recreate wiping qBittorrent config, or a qBit config persistence issue) and find a way to set it permanently, possibly via qBittorrent.conf in appdata or an environment variable
+
+---
+
 ## [15-04-2026] Docker/qBittorrent: Added vpn-watchdog to fix namespace breakage on reboot
 - Unraid's rc.docker restarts containers individually on boot using `docker start`, completely bypassing compose `depends_on` rules
 - This meant qBittorrent was starting before Gluetun was healthy and getting stuck in its own isolated network namespace every reboot
