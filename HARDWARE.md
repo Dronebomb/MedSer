@@ -35,3 +35,21 @@ LSI SAS3008 in IT mode (SFF-8643 to SFF-8482 cabling)
 
 ## OS
 Unraid 7.2.4
+
+---
+
+## Key Paths
+
+> Note: these paths are based on known state as of mid-April 2026. Some may have shifted during the failed appdata migration — verify before relying on them.
+
+| Path | Purpose |
+|------|---------|
+| `/mnt/user/Media` | Main media directory |
+| `/mnt/user/Media/config/` | Container appdata/configs (non-standard — originally from YAMS) |
+| `/mnt/user/Media/adguardhome/` | AdGuard Home config |
+| `/mnt/user/appdata/` | Unraid appdata share (also backed up) |
+| `/mnt/user/appdata/compose/main/` | Main Docker Compose stack |
+| `/mnt/user/appdata/compose/custom/` | Custom stack (Frigate, Home Assistant, Mosquitto) |
+| `/mnt/user/Media/downloads/torrents/` | Torrent files |
+| `/mnt/user-data/appdata/medser-changelog/` | Changelog Flask app |
+| `/mnt/disks/Samsung_S2_Portable/config/frigate/` | Frigate config — Samsung drive rejected, this path is likely broken |
