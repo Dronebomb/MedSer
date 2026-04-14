@@ -4,6 +4,15 @@ A running log of all changes made to the MedSer home server. Most recent changes
 
 ---
 
+## [15-04-2026] Docker/qBittorrent: Added vpn-watchdog to fix namespace breakage on reboot
+- Unraid's rc.docker restarts containers individually on boot using `docker start`, completely bypassing compose `depends_on` rules
+- This meant qBittorrent was starting before Gluetun was healthy and getting stuck in its own isolated network namespace every reboot
+- Added `vpn-watchdog` service to compose using `docker:cli` image -- listens for any Gluetun `start` event and restarts qBittorrent 10 seconds later
+- Catches all cases regardless of what triggered the Gluetun restart (boot, manual, Watchtower)
+- Recreated qBittorrent via `docker compose up -d --force-recreate qbittorrent` to restore access
+
+---
+
 ## [14-04-2026] Hardware: Installed replacement SAS drive
 - Swapped in Seagate ST4000NM0023 4TB SAS (serial Z1Z142CE00009350H47W) to replace dead drive Z1Z97F0T
 - SMART test came back clean — 0 grown defects, 0 uncorrected errors
