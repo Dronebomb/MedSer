@@ -4,6 +4,13 @@ A running log of all changes made to the MedSer home server. Most recent changes
 
 ---
 
+## [14-04-2026] Hardware: Installed replacement SAS drive
+- Swapped in Seagate ST4000NM0023 4TB SAS (serial Z1Z142CE00009350H47W) to replace dead drive Z1Z97F0T
+- SMART test came back clean — 0 grown defects, 0 uncorrected errors
+- Drive was already formatted to 512-byte logical block size, no sg_format needed
+
+---
+
 ## [14-04-2026 9:30am] Docker/Gluetun: Set timezone to Brisbane for log clarity
 - Added `TZ=Australia/Brisbane` to Gluetun environment in `docker-compose.yaml`
 - Gluetun logs were previously in UTC causing confusion when debugging - now show AEST
