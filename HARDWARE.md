@@ -23,7 +23,8 @@ LSI SAS3008 in IT mode (SFF-8643 to SFF-8482 cabling)
 ### Array
 - Disk 1: Seagate ST1000DM003 1TB SATA (XFS)
 - Disk 2: Seagate ST4000NXCLAR4000 4TB SAS — serial Z1Z8F9E3 (XFS)
-  - Note: second SAS slot has a dead drive (Z1Z97F0T) pending swap for eBay replacement
+- Disk 3: Seagate ST4000NM0023 4TB SAS — serial Z1Z142CE00009350H47W (replacement for dead Z1Z97F0T, installed 14-04-2026)
+  - SMART: healthy, 0 grown defects, 0 uncorrected errors, already formatted to 512-byte logical block size
 
 ### Cache Pool
 - SanDisk X400 128GB M.2
