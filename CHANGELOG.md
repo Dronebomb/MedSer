@@ -4,6 +4,34 @@ A running log of all changes made to the MedSer home server. Most recent changes
 
 ---
 
+## [17-04-2026] Networking: Server lost LAN access - ethernet cable disconnected
+- All services unreachable locally and remotely despite all Docker containers showing healthy
+- `ip a` showed eth0 as NO-CARRIER, bond0 and br0 both DOWN - server had silently fallen back to WiFi at 192.168.1.113 instead of the usual 192.168.1.131
+- Services were actually running fine, just on the wrong IP
+- Physical ethernet cable was reconnected, eth0 came back UP and rejoined bond0/br0, IP returned to 192.168.1.131
+
+---
+
+## [17-04-2026] Docker/qBittorrent: tun0 interface reverted to lo again - fixed + self-healing added
+- Trackers showing unreachable again, same recurring issue as 15-04 and 11-04
+- Confirmed via qBittorrent.conf that Session.Interface had reverted to lo
+- Fixed manually via qBittorrent API
+- Root cause still unknown - suspect container recreates wiping the setting
+- Added tun0 enforcement to sync-qbit-port.sh so the script self-heals this every 5 minutes automatically going forward
+
+---
+
+## [17-04-2026] Docker/qBittorrent: Created sync-qbit-port.sh - auto port sync and interface enforcement
+- ProtonVPN via Gluetun periodically rotates the forwarded port, causing qBittorrent to listen on a stale port
+- Written in bash using Gluetun's internal control API (port 8000 inside container) and qBittorrent Web API
+- Syncs forwarded port from Gluetun to qBittorrent listen port every 5 minutes
+- Also enforces tun0 as the network interface, self-healing the recurring lo revert bug
+- Script saved to /mnt/user/scripts/sync-qbit-port.sh
+- Cron job registered via /boot/config/go for persistence across reboots: `*/5 * * * *`
+- Script (without credentials) committed to this repo at scripts/sync-qbit-port.sh
+
+---
+
 ## [15-04-2026 8:30am] Docker/qBittorrent: Network interface reverted to lo again - fixed manually
 - All trackers showing "skipping tracker announce (unreachable)", DHT 0 nodes, no downloads or uploads
 - qBittorrent Advanced settings had reverted network interface back to `lo` (loopback) instead of `tun0`
