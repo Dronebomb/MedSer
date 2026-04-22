@@ -25,20 +25,13 @@ const ascii_headers = [
  \`-'     \`-'  \`-'     \`-'    \`-'     \`-'  \`-'     \`-'  \`-'     \`-'    \`-'     \`-'  \`-'     \`-'  \`-'     \`-'  \`-'     \`-'  \`-'     \`-'  \`-'     \`-' 
 `,
 
-  // RubiFont
-  ` ___                     __             
-| o ) _    _  _ ||   _  / _| _  _  () ||
-| o \\/o\\ |/ \\/o\\| ] /o\\ | ] /_|/o\\ ||/o|
-|___/\\(  L_n|\\_/L|  \\_,]L|  L| \\_,]L|\\_|
-                                        
-`,
-
 ];
 
 const chosen = ascii_headers[Math.floor(Math.random() * ascii_headers.length)];
 
-const custom_text_header = `
-<style>
+// Inject styles via stylesheet API so they actually apply (innerHTML ignores <style> tags)
+const style = document.createElement('style');
+style.textContent = `
   .custom-text-header {
     width: 100%;
     text-align: center;
@@ -51,8 +44,8 @@ const custom_text_header = `
     white-space: pre;
     margin: 0 auto;
   }
-</style>
-<div class="custom-text-header"><pre>${chosen}</pre></div>
 `;
+document.head.appendChild(style);
 
+const custom_text_header = `<div class="custom-text-header"><pre>${chosen}</pre></div>`;
 document.getElementById("login").innerHTML += custom_text_header;
