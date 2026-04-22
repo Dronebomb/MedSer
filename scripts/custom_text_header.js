@@ -13,16 +13,6 @@ const ascii_headers = [
                                                                                                        
 `,
 
-  // Small Poison
-  `                                                                                                   
-@@@@@@@  @@@@@@@@    @@@  @@@  @@@@@@  @@@@@@@     @@@@@@  @@@@@@@@ @@@@@@@   @@@@@@  @@@ @@@@@@@  
-@@!  @@@ @@!         @@!@!@@@ @@!  @@@   @!!      @@!  @@@ @@!      @@!  @@@ @@!  @@@ @@! @@!  @@@ 
-@!@!@!@  @!!!:!      @!@@!!@! @!@  !@!   @!!      @!@!@!@! @!!!:!   @!@!!@!  @!@!@!@! !!@ @!@  !@! 
-!!:  !!! !!:         !!:  !!! !!:  !!!   !!:      !!:  !!! !!:      !!: :!!  !!:  !!! !!: !!:  !!! 
-:: : ::  : :: ::     ::    :   : :. :     :        :   : :  :        :   : :  :   : : :   :: :  :  
-                                                                                                   
-`,
-
   // BlurVision
   `   _     _      _     _        _     _      _     _      _     _        _     _      _     _      _     _      _     _      _     _      _     _   
   (c).-.(c)    (c).-.(c)      (c).-.(c)    (c).-.(c)    (c).-.(c)      (c).-.(c)    (c).-.(c)    (c).-.(c)    (c).-.(c)    (c).-.(c)    (c).-.(c)  
@@ -48,6 +38,20 @@ const ascii_headers = [
 const chosen = ascii_headers[Math.floor(Math.random() * ascii_headers.length)];
 
 const custom_text_header = `
+<style>
+  .custom-text-header {
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+  }
+  .custom-text-header pre {
+    display: inline-block;
+    font-size: clamp(4px, 0.45vw, 13px);
+    line-height: 1.3;
+    white-space: pre;
+    margin: 0 auto;
+  }
+</style>
 <div class="custom-text-header"><pre>${chosen}</pre></div>
 `;
 
