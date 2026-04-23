@@ -4,6 +4,16 @@ A running log of all changes made to the MedSer home server. Most recent changes
 
 ---
 
+## [23-04-2026 19:37] Docker/AniBridge: Installed and configured AniBridge for Jellyfin to MAL sync
+- Installed AniBridge via Unraid Community Applications, running on port 4848
+- Config file created at /mnt/user/appdata/AniBridge/config.yaml (note capital A, matches container mount)
+- Configured with Jellyfin as library provider (user: Drone) and MyAnimeList as list provider
+- Sections: Shows and Movies, scan modes: periodic, poll and webhook
+- Dry run confirmed working - correctly matched anime titles against MAL and showed accurate progress/status updates
+- Dry run mode still active pending Jellyfin webhook plugin setup and watch history cleanup on some titles
+
+---
+
 ## [17-04-2026] Networking: Server lost LAN access - ethernet cable disconnected
 - All services unreachable locally and remotely despite all Docker containers showing healthy
 - `ip a` showed eth0 as NO-CARRIER, bond0 and br0 both DOWN - server had silently fallen back to WiFi at 192.168.1.113 instead of the usual 192.168.1.131
