@@ -4,6 +4,15 @@ A running log of all changes made to the MedSer home server. Most recent changes
 
 ---
 
+## [24-04-2026] Docker/Jellyfin: Library settings not saving - fetcher toggles and trickplay reverting on save
+- Ticking any setting in library options (fetchers, trickplay extraction etc.) and pressing OK would appear to succeed but revert immediately on re-opening
+- No errors in Jellyfin logs on save, and config directory permissions looked fine overall
+- Root cause: `options.xml` for both Shows and Movies libraries were owned by `root` instead of the container user `1000:1000` - container could read but not write them
+- Fixed by running `chown 1000:1000` on both `/mnt/user/Media/config/jellyfin/data/root/default/Shows/options.xml` and `.../Movies/options.xml`
+- Library settings now save and persist correctly
+
+---
+
 ## [23-04-2026 19:37] Docker/AniBridge: Installed and configured AniBridge for Jellyfin to MAL sync
 - Installed AniBridge via Unraid Community Applications, running on port 4848
 - Config file created at /mnt/user/appdata/AniBridge/config.yaml (note capital A, matches container mount)
