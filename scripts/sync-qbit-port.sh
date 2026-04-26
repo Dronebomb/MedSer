@@ -9,10 +9,9 @@
 #      ProtonVPN periodically rotates the forwarded port - without this, torrents
 #      stop seeding/connecting because qBit is listening on a stale port.
 #
-#   2. Checks that qBittorrent's network interface is set to tun0 (the WireGuard
-#      tunnel inside the Gluetun namespace). This setting has been observed to
-#      revert to lo (loopback) after container recreates, which causes all tracker
-#      announces to fail with "unreachable". The script resets it to tun0 if needed.
+#   2. Checks that qBittorrent's network interface is set to tun0 via the API
+#      and resets it if not. Uses current_network_interface (not iface).
+#      Previous version read from qBittorrent.conf which can lag behind running state.
 #
 # Requirements:
 #   - qBittorrent must be running in Gluetun's network namespace (network_mode: service:gluetun)
@@ -49,11 +48,12 @@ else
     echo "$(date): Port already in sync ($CURRENT_PORT), nothing to do"
 fi
 
-CURRENT_IFACE=$(docker exec qbittorrent cat /config/qBittorrent/qBittorrent.conf | grep -i "^Session.Interface=" | cut -d'=' -f2)
+CURRENT_IFACE=$(curl -s -b "$COOKIE" "${QBIT_URL}/api/v2/app/preferences" | jq -r '.current_network_interface')
 
 if [[ "$CURRENT_IFACE" != "tun0" ]]; then
-    curl -s -b "$COOKIE" -d 'json={"iface":"tun0","iface_name":"tun0"}' "${QBIT_URL}/api/v2/app/setPreferences"
-    echo "$(date): Interface was ${CURRENT_IFACE:-empty}, reset to tun0"
+    curl -s -b "$COOKIE" -d 'json={"current_network_interface":"tun0","current_interface_address":"0.0.0.0"}' "${QBIT_URL}/api/v2/app/setPreferences"
+    DISPLAY_IFACE="${CURRENT_IFACE:-Any}"
+    echo "$(date): Interface was ${DISPLAY_IFACE}, reset to tun0"
 else
     echo "$(date): Interface already tun0, nothing to do"
 fi

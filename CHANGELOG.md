@@ -4,6 +4,15 @@ A running log of all changes made to the MedSer home server. Most recent changes
 
 ---
 
+## [26-04-2026] Docker/qBittorrent: Fixed sync-qbit-port.sh interface check always returning null
+- Script was reading interface from qBittorrent.conf via `docker exec` which can lag behind the actual running state
+- API field name was also wrong - used `iface` which the qBit API silently ignores instead of returning an error
+- Correct field name is `current_network_interface` on both GET preferences and POST setPreferences
+- Also added `current_interface_address: 0.0.0.0` to the set payload to bind to all IPv4 on tun0
+- Script now correctly detects and self-heals interface reverts every 5 minutes
+
+---
+
 ## [24-04-2026] Docker/Jellyfin: Library settings not saving - fetcher toggles and trickplay reverting on save
 - Ticking any setting in library options (fetchers, trickplay extraction etc.) and pressing OK would appear to succeed but revert immediately on re-opening
 - No errors in Jellyfin logs on save, and config directory permissions looked fine overall
